@@ -5,4 +5,4 @@
 *.pyc
 *.DS_store
 *.o
-serc_framework
+.serc_framework
