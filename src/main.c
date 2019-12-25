@@ -1,11 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-#include<serve.h>
-#include<file_handler.h>
+#include<http_server.h>
 
 int main()
 {
-	server_run(6900);
+	http_server_run(6900);
 	return 0;
 }

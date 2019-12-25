@@ -1,0 +1,10 @@
+
+CC=gcc
+RM=rm -f
+
+clean :
+	$(RM) $(BIN_DIR)/*.out $(OBJ_DIR)/*.o
+	make -w -C./.serc_framework/serc clean CON_DIR=`pwd`/.serc_config
+
+all :
+	make -w -C ./.serc_framework/serc all CON_DIR=`pwd`/.serc_config
