@@ -16,6 +16,8 @@ LFLAFS=-L${CUTLERY_PATH}/bin -lcutlery -L${BOOMPAR_PATH}/bin -lboompar -L${CONNM
 TARGET=app.out
 
 update_serc :
+	cd ${SERC_PATH}; git checkout -- .
+	cd ${SERC_PATH}; git checkout master
 	cd ${SERC_PATH}; git pull origin master
 
 clean :
