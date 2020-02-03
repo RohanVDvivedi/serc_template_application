@@ -21,8 +21,8 @@
 		}
 	},
 	{
-		"controller"	:	"wild_controller",
-		"methods"		:	["*"],
+		"controller"	:	"wildcard_controller",
+		"methods"		:	"*",
 		"paths"			:	["/wild/*"]
 	}
 ]

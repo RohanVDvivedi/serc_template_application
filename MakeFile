@@ -29,4 +29,4 @@ routes :
 
 all :
 	make -w -C ${SERC_PATH} all   		CON_DIR=`pwd`/${CON_DIR}
-	${CC} ${SRC_DIR}/main.c ${SRC_DIR}/controller/first_controller.c -o ${BIN_DIR}/app.out ${CFLAGS} ${LFLAFS}
+	${CC} ${SRC_DIR}/main.c ${SRC_DIR}/controller/*.c -o ${BIN_DIR}/app.out ${CFLAGS} ${LFLAFS}
