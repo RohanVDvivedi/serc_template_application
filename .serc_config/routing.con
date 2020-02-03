@@ -23,6 +23,9 @@
 	{
 		"controller"	:	"wildcard_controller",
 		"methods"		:	"*",
-		"paths"			:	["/wild/*"]
+		"paths"			:	["/wild/*"],
+		"set_response_headers"		:	{
+			"is_wild_controller"	:	"true"
+		}
 	}
 ]
