@@ -3,4 +3,6 @@
 
 #define SERC_ROOT_PATH "./public"
 
+#define DEFAULT_SERVER_RESPONSE_COMPRESSION GZIP
+
 #endif
