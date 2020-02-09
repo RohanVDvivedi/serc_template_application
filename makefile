@@ -15,9 +15,17 @@ LFLAFS=-L${SERC_PATH}/bin -lserc -L${CONNMAN_PATH}/bin -lconnman -L${BOOMPAR_PAT
 
 TARGET=app.out
 
+update_serc :
+	cd ${SERC_PATH}; git checkout -- .
+	cd ${SERC_PATH}; git checkout master
+	cd ${SERC_PATH}; git pull origin master
+
 clean :
 	$(RM) $(BIN_DIR)/*.out $(OBJ_DIR)/*.o
 	make -w -C ${SERC_PATH} clean CON_DIR=`pwd`/${CON_DIR}
+
+routes :
+	make -w -C ${SERC_PATH} routes		CON_DIR=`pwd`/${CON_DIR}
 
 all :
 	make -w -C ${SERC_PATH} all   CON_DIR=`pwd`/${CON_DIR}
