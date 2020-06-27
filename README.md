@@ -5,13 +5,13 @@ All you need to do is :
 
 ### For first run :
 
-**set up necessary configurations in .serc_config folder**
-**set up necessary routing logic in .serc_config folder**
-mkdir .serc_framework
-cd .serc_framework
-git clone https://github.com/RohanVDvivedi/serc.git
-cd ..
-make routes clean all
+* **set up necessary configurations in .serc_config folder**
+* **set up necessary routing logic in .serc_config folder**
+* mkdir .serc_framework
+* cd .serc_framework
+* git clone https://github.com/RohanVDvivedi/serc.git
+* cd ..
+* make routes clean all
 
 ### For https server :
 
