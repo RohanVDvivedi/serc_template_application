@@ -11,6 +11,12 @@ git clone https://github.com/RohanVDvivedi/serc.git
 cd ..
 make routes clean all
 
+### For https server :
+
+* checkout main source file at src/main.c
+* use appropriate https server run line
+* add ssl certificates (you may use `make ssl_cert` for building self signed certificates)
+
 ### For subsequent run :
 
 * #### to update serc framework
@@ -18,6 +24,9 @@ make routes clean all
 
 * #### to update routing 
   * make routes
+
+* #### to built self signed ssl certificates and primary keys (if you want to use https)
+  * make ssl_cert
 
 * #### to clean all binaries (including serc binaries)
   * make clean
