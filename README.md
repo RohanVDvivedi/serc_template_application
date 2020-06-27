@@ -27,7 +27,7 @@ All you need to do is :
 * #### to update routing 
   * `make routes`
 
-* #### to built self signed ssl certificates and primary keys (if you want to use https)
+* #### to built self signed ssl certificates and private/public keys (if you want to use https)
   * `make ssl_cert`
 
 * #### to clean all binaries (including serc binaries)
