@@ -6,3 +6,6 @@
 *.DS_store
 *.o
 .serc_framework
+
+*.key
+*.crt
