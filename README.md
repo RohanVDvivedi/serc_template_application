@@ -5,6 +5,8 @@ All you need to do is :
 
 ### For first run :
 
+**set up necessary configurations in .serc_config folder**
+**set up necessary routing logic in .serc_config folder**
 mkdir .serc_framework
 cd .serc_framework
 git clone https://github.com/RohanVDvivedi/serc.git
@@ -20,16 +22,16 @@ make routes clean all
 ### For subsequent run :
 
 * #### to update serc framework
-  * make update_serc
+  * `make update_serc`
 
 * #### to update routing 
-  * make routes
+  * `make routes`
 
 * #### to built self signed ssl certificates and primary keys (if you want to use https)
-  * make ssl_cert
+  * `make ssl_cert`
 
 * #### to clean all binaries (including serc binaries)
-  * make clean
+  * `make clean`
 
 * #### to build application
-  * make all
+  * `make all`
