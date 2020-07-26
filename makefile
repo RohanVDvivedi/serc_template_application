@@ -10,27 +10,24 @@ RM=rm -f
 SERC_PATH=.serc_framework/serc
 CON_DIR=.serc_config
 
-CFLAGS=-Wall -O3 -I${INC_DIR} -I${CON_DIR} -I${SERC_PATH}/inc
-LFLAFS=-L${SERC_PATH}/bin -lserc -lconnman -lboompar -lpthread -ljsonpar -lcutlery -lrwlock -lz -lssl -lcrypto
+CFLAGS=-Wall -O3 -I${INC_DIR}
+LFLAFS=-lserc -lconnman -lboompar -lpthread -ljsonpar -lcutlery -lrwlock -lz -lssl -lcrypto
 
 TARGET=app.out
 
-update_serc :
-	cd ${SERC_PATH}; git checkout -- .
-	cd ${SERC_PATH}; git checkout master
-	cd ${SERC_PATH}; git pull origin master
-
 clean :
-	$(RM) -r $(BIN_DIR) $(OBJ_DIR)
-	make -w -C ${SERC_PATH} clean		CON_DIR=`pwd`/${CON_DIR}
+	$(RM) -r $(BIN_DIR) $(OBJ_DIR) $(OBJ_DIR)
 
-routes :
-	make -w -C ${SERC_PATH} routes		CON_DIR=`pwd`/${CON_DIR}
+${SRC_DIR}/distributer.c : ${CON_DIR}/routing.con
+	route.py ${CON_DIR}/routing.con
+	mv distributer.c ${SRC_DIR}/
 
-ssl_cert :
-	make -w -C ${SERC_PATH} ssl_cert	CON_DIR=`pwd`/${CON_DIR}
+routes: ${SRC_DIR}/distributer.c
 
-all :
-	make -w -C ${SERC_PATH} all   		CON_DIR=`pwd`/${CON_DIR}
+all : routes
 	mkdir -p bin
-	${CC} ${SRC_DIR}/main.c ${SRC_DIR}/controller/*.c -o ${BIN_DIR}/app.out ${CFLAGS} ${LFLAFS}
+	${CC} ${CFLAGS} ${SRC_DIR}/main.c ${SRC_DIR}/distributer.c  ${SRC_DIR}/controller/*.c ${LFLAFS} -o ${BIN_DIR}/app.out 
+
+# builds a self signed ssl key and certificate for your server
+ssl_cert :
+	openssl req -new -x509 -pubkey -newkey rsa:4096 -days 365 -nodes -keyout ${CON_DIR}/server.key -out ${CON_DIR}/server.crt

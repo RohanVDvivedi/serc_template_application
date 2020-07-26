@@ -1,5 +1,5 @@
 # serc_template_application
-This is a Project, to be used as a template application for the serc framework
+This is a Project, to be used as a template application for the [serc](https://github.com/RohanVDvivedi/serc.git) framework
 
 All you need to do is :
 
@@ -7,11 +7,10 @@ All you need to do is :
 
 * **set up necessary configurations in .serc_config folder**
 * **set up necessary routing logic in .serc_config folder**
-* mkdir .serc_framework
-* cd .serc_framework
+* **set up necessary application logic in src and inc folders**
 * git clone https://github.com/RohanVDvivedi/serc.git
-* cd ..
-* make routes clean all
+* cd serc
+* sudo make install
 
 ### For https server :
 
@@ -21,11 +20,10 @@ All you need to do is :
 
 ### For subsequent run :
 
-* #### to update serc framework
-  * `make update_serc`
-
 * #### to update routing 
   * `make routes`
+  * this will create a source file "distributer.c" in your src folder, you need to compile it with your application and serc
+  * the above point is already taken care of by `make all`, read makefile and read serc source for more information.
 
 * #### to built self signed ssl certificates and private/public keys (if you want to use https)
   * `make ssl_cert`
@@ -33,5 +31,5 @@ All you need to do is :
 * #### to clean all binaries (including serc binaries)
   * `make clean`
 
-* #### to build application
+* #### to build your application
   * `make all`

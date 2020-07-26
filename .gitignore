@@ -9,3 +9,5 @@
 
 *.key
 *.crt
+
+**/distributer.c
