@@ -7,10 +7,9 @@ BIN_DIR=./bin
 CC=gcc
 RM=rm -f
 
-SERC_PATH=.serc_framework/serc
 CON_DIR=.serc_config
 
-CFLAGS=-Wall -O3 -I${INC_DIR}
+CFLAGS=-Wall -O3 -I${INC_DIR} -I${CON_DIR}
 LFLAFS=-lserc -lconnman -lboompar -lpthread -ljsonpar -lcutlery -lrwlock -lz -lssl -lcrypto
 
 TARGET=app.out
@@ -25,9 +24,12 @@ ${SRC_DIR}/distributer.c : ${CON_DIR}/routing.con
 
 routes: ${SRC_DIR}/distributer.c
 
-all : routes
+# figure out all the sources in the project
+SOURCES=${shell find $(SRC_DIR) -name '*.c'}
+
+all : routes ${SOURCES}
 	mkdir -p bin
-	${CC} ${CFLAGS} ${SRC_DIR}/main.c ${SRC_DIR}/distributer.c  ${SRC_DIR}/controller/*.c ${LFLAFS} -o ${BIN_DIR}/app.out 
+	${CC} ${CFLAGS} ${SOURCES} ${LFLAFS} -o ${BIN_DIR}/app.out 
 
 # builds a self signed ssl key and certificate for your server
 ssl_cert :
