@@ -17,6 +17,7 @@ TARGET=app.out
 
 clean :
 	$(RM) -r $(BIN_DIR) $(OBJ_DIR) $(OBJ_DIR)
+	$(RM) ./src/distributer.c
 
 ${SRC_DIR}/distributer.c : ${CON_DIR}/routing.con
 	route.py ${CON_DIR}/routing.con
