@@ -27,5 +27,10 @@
 		"set_response_headers"		:	{
 			"is_wild_controller"	:	"true"
 		}
+	},
+	{
+		"controller"	:	"cookie_setup_controller",
+		"methods"		:	"*",
+		"paths"			:	["/cookie_setup"]
 	}
 ]
