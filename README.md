@@ -2,7 +2,7 @@
 This is a Project, to be used as a template application for the [serc](https://github.com/RohanVDvivedi/serc.git) framework
 
 ### For setup before first run :
- * you must install [serc](https://github.com/RohanVDvivedi/serc.git)
+ * you must install [serc](https://github.com/RohanVDvivedi/serc.git) *and its dependencies*.
 
 ### For setting up the https server :
  * checkout main source file at src/main.c
