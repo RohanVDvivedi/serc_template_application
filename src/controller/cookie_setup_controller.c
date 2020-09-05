@@ -13,8 +13,8 @@ int cookie_setup_controller(HttpRequest* hrq, HttpResponse* hrp)
 	{
 		client_count++;
 
-		dstring SetCookie;init_dstring(&SetCookie, "", 64);
-		sprintf(SetCookie.cstring, "client_count=%d", client_count);
+		dstring SetCookie;init_dstring_data(&SetCookie, NULL, 0);
+		append_to_dstring_formatted(&SetCookie, "client_count=%d", client_count);
 			setSetCookie(hrp, &SetCookie);
 		deinit_dstring(&SetCookie);
 	}
