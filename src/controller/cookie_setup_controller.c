@@ -13,13 +13,13 @@ int cookie_setup_controller(HttpRequest* hrq, HttpResponse* hrp)
 	{
 		client_count++;
 
-		dstring SetCookie;init_dstring_data(&SetCookie, NULL, 0);
-		append_to_dstring_formatted(&SetCookie, "client_count=%d", client_count);
+		dstring SetCookie;init_dstring(&SetCookie, NULL, 0);
+		snprintf_dstring(&SetCookie, "client_count=%d", client_count);
 			setSetCookie(hrp, &SetCookie);
 		deinit_dstring(&SetCookie);
 	}
 
 	printRequest(hrq);
-	append_to_dstring(&(hrp->body), "I got a Cookie for you");
+	concatenate_dstring(&(hrp->body), dstring_DUMMY_CSTRING("I got a Cookie for you"));
 	return 0;
 }

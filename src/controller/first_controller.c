@@ -4,6 +4,6 @@
 int first_controller(HttpRequest* hrq, HttpResponse* hrp)
 {
 	printRequest(hrq);
-	append_to_dstring(&(hrp->body), "Hello World");
+	concatenate_dstring(&(hrp->body), dstring_DUMMY_CSTRING("Hello World"));
 	return 0;
 }
