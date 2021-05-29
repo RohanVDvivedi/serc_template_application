@@ -1,6 +1,8 @@
 [
 	{
+		"before"					:	["call_before_controller"],
 		"controller"				:	"first_controller",
+		"after"						:	["call_after_controller"],
 		"methods"					:	["GET","POST"],
 		"paths"						:	["/index/get_post"],
 		"set_response_headers"		:	{
@@ -10,7 +12,9 @@
 	{
 		"methods"		:	["DELETE","POST"],
 		"paths"			:	["/index/delete_post"],
-		"controller"	:	"first_controller"
+		"before"		:	"call_before_controller",
+		"controller"	:	"first_controller",
+		"after"			:	"call_after_controller"
 	},
 	{
 		"methods"		:	["GET"],
@@ -22,6 +26,8 @@
 	},
 	{
 		"controller"	:	"wildcard_controller",
+		"before"		:	["call_before_controller"],
+		"after"			:	["call_after_controller"],
 		"methods"		:	"*",
 		"paths"			:	["/wild/*/personal/*/hello/*", "/all/*"],
 		"set_response_headers"		:	{
@@ -30,6 +36,8 @@
 	},
 	{
 		"controller"	:	"cookie_setup_controller",
+		"before"		:	["call_before_controller"],
+		"after"			:	["call_after_controller"],
 		"methods"		:	"*",
 		"paths"			:	["/cookie_setup"]
 	}

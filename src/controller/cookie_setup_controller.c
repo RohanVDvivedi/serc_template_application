@@ -19,7 +19,6 @@ int cookie_setup_controller(HttpRequest* hrq, HttpResponse* hrp)
 		deinit_dstring(&SetCookie);
 	}
 
-	printRequest(hrq);
 	concatenate_dstring(&(hrp->body), dstring_DUMMY_CSTRING("I got a Cookie for you"));
 	return 0;
 }
