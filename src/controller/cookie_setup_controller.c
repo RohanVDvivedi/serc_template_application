@@ -9,7 +9,7 @@ int client_count = 0;
 int cookie_setup_controller(HttpRequest* hrq, HttpResponse* hrp)
 {
 	dstring* cookie = getCookie(hrq);
-	if(cookie == NULL || cookie->cstring[0] == '\0')
+	if(cookie == NULL || is_empty_dstring(cookie))
 	{
 		client_count++;
 
@@ -19,6 +19,6 @@ int cookie_setup_controller(HttpRequest* hrq, HttpResponse* hrp)
 		deinit_dstring(&SetCookie);
 	}
 
-	concatenate_dstring(&(hrp->body), dstring_DUMMY_CSTRING("I got a Cookie for you"));
+	concatenate_dstring(&(hrp->body), &get_literal_cstring("I got a Cookie for you"));
 	return 0;
 }

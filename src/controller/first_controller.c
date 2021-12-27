@@ -3,6 +3,6 @@
 
 int first_controller(HttpRequest* hrq, HttpResponse* hrp)
 {
-	concatenate_dstring(&(hrp->body), dstring_DUMMY_CSTRING("Hello World"));
+	concatenate_dstring(&(hrp->body), &get_literal_cstring("Hello World"));
 	return 0;
 }
