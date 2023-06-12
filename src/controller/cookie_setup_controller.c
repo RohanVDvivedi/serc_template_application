@@ -19,7 +19,7 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 	if(-1 == parse_cookies_from_cookie_header(&cookies, &(hrq->headers)))
 	{
 		close_connection = 1;
-		goto EXIT_C_1_1;
+		goto EXIT_C_1;
 	}
 
 	// initialize response head
@@ -42,7 +42,7 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 	if(-1 == serialize_http_response_head(strm, &hrp))
 	{
 		close_connection = 1;
-		goto EXIT_C_1;
+		goto EXIT_C_2;
 	}
 
 	stacked_stream sstrm;
@@ -51,7 +51,7 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 	if(0 > intialize_http_body_and_encoding_streams_for_writing(&sstrm, strm, &(hrp.headers)))
 	{
 		close_connection = 1;
-		goto EXIT_C_2;
+		goto EXIT_C_3;
 	}
 
 	int error = 0;
@@ -60,26 +60,26 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 	if(error)
 	{
 		close_connection = 1;
-		goto EXIT_C_3;
+		goto EXIT_C_4;
 	}
 
 	flush_all_from_stream(get_top_of_stacked_stream(&sstrm, WRITE_STREAMS), &error);
 	if(error)
 	{
 		close_connection = 1;
-		goto EXIT_C_3;
+		goto EXIT_C_4;
 	}
 
-	EXIT_C_3:;
+	EXIT_C_4:;
 	close_deinitialize_free_all_from_stacked_stream(&sstrm, WRITE_STREAMS);
 
-	EXIT_C_2:;
+	EXIT_C_3:;
 	deinitialize_stacked_stream(&sstrm);
 
-	EXIT_C_1:;
+	EXIT_C_2:;
 	deinit_http_response_head(&hrp);
 
-	EXIT_C_1_1:;
+	EXIT_C_1:;
 	deinit_dmap(&cookies);
 
 	//EXIT_C_0:;
