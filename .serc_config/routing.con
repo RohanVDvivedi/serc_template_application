@@ -1,15 +1,19 @@
 [
 	{
 		"controller"	:	"first_controller",
+		"construct_per_request_param" : "new_per_request_param",
 		"before"		:	["call_before_controller"],
 		"after"			:	["call_after_controller"],
+		"destroy_per_request_param" : "del_per_request_param",
 		"methods"		:	["GET","POST"],
 		"paths"			:	["/index/get_post"]
 	},
 	{
 		"controller"	:	"first_controller",
+		"construct_per_request_param" : "new_per_request_param",
 		"before"		:	"call_before_controller",
 		"after"			:	"call_after_controller",
+		"destroy_per_request_param" : "del_per_request_param",
 		"methods"		:	["DELETE","POST"],
 		"paths"			:	["/index/delete_post"]
 	},
@@ -20,15 +24,19 @@
 	},
 	{
 		"controller"	:	"wildcard_controller",
+		"construct_per_request_param" : "new_per_request_param",
 		"before"		:	["call_before_controller"],
 		"after"			:	["call_after_controller"],
+		"destroy_per_request_param" : "del_per_request_param",
 		"methods"		:	"*",
 		"paths"			:	["/wild/*/personal/*/hello/*", "/all/*"]
 	},
 	{
 		"controller"	:	"cookie_setup_controller",
+		"construct_per_request_param" : "new_per_request_param",
 		"before"		:	["call_before_controller"],
 		"after"			:	["call_after_controller"],
+		"destroy_per_request_param" : "del_per_request_param",
 		"methods"		:	"*",
 		"paths"			:	["/cookie_setup"]
 	}
