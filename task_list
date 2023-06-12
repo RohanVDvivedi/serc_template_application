@@ -1,4 +1,3 @@
- * restore all of the old functionality
  * add forms to test forms by path params (get) and body(post)
  * add testcase for websockets
  * add testcase for server sent events
