@@ -15,7 +15,7 @@ LFLAFS=-lserc -lm -lhttpparser -lconnman -lz -lssl -lcrypto -lboompar -lpthread 
 TARGET=app.out
 
 clean :
-	$(RM) -r $(BIN_DIR) $(OBJ_DIR)
+	$(RM) -r $(BIN_DIR) $(LIB_DIR) $(OBJ_DIR)
 	$(RM) ./src/distributer.c
 
 ${SRC_DIR}/distributer.c : ${CON_DIR}/routing.con
