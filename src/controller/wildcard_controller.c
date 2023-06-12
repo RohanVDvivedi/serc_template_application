@@ -2,11 +2,10 @@
 #include<http_response.h>
 #include<http_header_util.h>
 
-#include<stdlib.h>
 #include<stacked_stream.h>
 #include<stream_util.h>
 
-int wildcard_controller(http_request_head* hrq, stream* strm, void** per_request_param, const void* server_param)
+int wildcard_controller(http_request_head* hrq, stream* strm, void* per_request_param, const void* server_param)
 {
 	int close_connection = 0;
 
@@ -57,10 +56,5 @@ int wildcard_controller(http_request_head* hrq, stream* strm, void** per_request
 	deinit_http_response_head(&hrp);
 
 	//EXIT_C_0:;
-	if(close_connection == 1)
-	{
-		free(*per_request_param);
-		*per_request_param = NULL;
-	}
 	return close_connection;
 }
