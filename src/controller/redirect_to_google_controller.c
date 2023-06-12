@@ -7,5 +7,23 @@
 
 int redirect_to_google_controller(http_request_head* hrq, stream* strm, void* per_request_param, const void* server_param)
 {
-	//TODO
+	int close_connection = 0;
+
+	// initialize response head
+	http_response_head hrp;
+	init_http_response_head_from_http_request_head(&hrp, hrq, 303, 0);
+	insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("location"), &get_dstring_pointing_to_literal_cstring("google.com"));
+
+	// write http response head
+	if(-1 == serialize_http_response_head(strm, &hrp))
+	{
+		close_connection = 1;
+		goto EXIT_C_1;
+	}
+
+	EXIT_C_1:;
+	deinit_http_response_head(&hrp);
+
+	//EXIT_C_0:;
+	return close_connection;
 }
