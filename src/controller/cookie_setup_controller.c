@@ -1,24 +1,87 @@
 #include<http_request.h>
 #include<http_response.h>
+#include<http_header_util.h>
+
+#include<stream_util.h>
 
 #include<stdio.h>
+#include<stdint.h>
 
 // this global varibale is not protected, since it is only for an example for testing cooking get and set fnctionality
 int client_count = 0;
 
-int cookie_setup_controller(http_request_head* hrq, stream* strm, void** per_request_param, const void* server_param)
+int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_request_param, const void* server_param)
 {
-	dstring* cookie = getCookie(hrq);
-	if(cookie == NULL || is_empty_dstring(cookie))
+	int close_connection = 0;
+
+	dmap cookies;
+	init_dmap(&cookies, 0);
+	if(-1 == parse_cookies_from_cookie_header(&cookies, &(hrq->headers)))
+	{
+		close_connection = 1;
+		goto EXIT_C_1_1;
+	}
+
+	// initialize response head
+	http_response_head hrp;
+	init_http_response_head_from_http_request_head(&hrp, hrq, 200, TRANSFER_CHUNKED);
+	insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("content-type"), &get_dstring_pointing_to_literal_cstring("text/plain"));
+
+	if(get_element_count_hashmap(&cookies) == 0)
 	{
 		client_count++;
 
-		dstring SetCookie;init_dstring(&SetCookie, NULL, 0);
-		snprintf_dstring(&SetCookie, "client_count=%d", client_count);
-			setSetCookie(hrp, &SetCookie);
-		deinit_dstring(&SetCookie);
+		dstring set_cookie_value;
+		init_dstring(&set_cookie_value, NULL, 0);
+		snprintf_dstring(&set_cookie_value, "client_count=%d", client_count);
+		insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("set-cookie"), &set_cookie_value);
+		deinit_dstring(&set_cookie_value);
 	}
 
-	concatenate_dstring(&(hrp->body), &get_literal_cstring("I got a Cookie for you"));
-	return 0;
+	// write http response head
+	if(-1 == serialize_http_response_head(strm, &hrp))
+	{
+		close_connection = 1;
+		goto EXIT_C_1;
+	}
+
+	stacked_stream sstrm;
+	initialize_stacked_stream(&sstrm);
+
+	if(0 > intialize_http_body_and_encoding_streams_for_writing(&sstrm, strm, &(hrp.headers)))
+	{
+		close_connection = 1;
+		goto EXIT_C_2;
+	}
+
+	int error = 0;
+
+	write_dstring_to_stream(get_top_of_stacked_stream(&sstrm, WRITE_STREAMS), &get_dstring_pointing_to_literal_cstring("I got a Cookie for you"), &error);
+	if(error)
+	{
+		close_connection = 1;
+		goto EXIT_C_3;
+	}
+
+	flush_all_from_stream(get_top_of_stacked_stream(&sstrm, WRITE_STREAMS), &error);
+	if(error)
+	{
+		close_connection = 1;
+		goto EXIT_C_3;
+	}
+
+	EXIT_C_3:;
+	close_deinitialize_free_all_from_stacked_stream(&sstrm, WRITE_STREAMS);
+
+	EXIT_C_2:;
+	deinitialize_stacked_stream(&sstrm);
+
+	EXIT_C_1:;
+	deinit_http_response_head(&hrp);
+
+	EXIT_C_1_1:;
+	deinit_dmap(&cookies);
+
+	//EXIT_C_0:;
+	return close_connection;
 }
