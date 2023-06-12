@@ -6,7 +6,7 @@
 // this global varibale is not protected, since it is only for an example for testing cooking get and set fnctionality
 int client_count = 0;
 
-int cookie_setup_controller(HttpRequest* hrq, HttpResponse* hrp)
+int cookie_setup_controller(http_request_head* hrq, stream* strm, void** per_request_param, const void* server_param)
 {
 	dstring* cookie = getCookie(hrq);
 	if(cookie == NULL || is_empty_dstring(cookie))

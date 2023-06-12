@@ -9,13 +9,13 @@ RM=rm -f
 
 CON_DIR=.serc_config
 
-CFLAGS=-Wall -O3 -I${INC_DIR} -I${CON_DIR}
+CFLAGS=-Wall -O3 -I${INC_DIR}
 LFLAFS=-lserc -lcashed -lm -lconnman -lboompar -lpthread -ljsonpar -lcutlery -lrwlock -lz -lssl -lcrypto
 
 TARGET=app.out
 
 clean :
-	$(RM) -r $(BIN_DIR) $(OBJ_DIR) $(OBJ_DIR)
+	$(RM) -r $(BIN_DIR) $(OBJ_DIR)
 	$(RM) ./src/distributer.c
 
 ${SRC_DIR}/distributer.c : ${CON_DIR}/routing.con
