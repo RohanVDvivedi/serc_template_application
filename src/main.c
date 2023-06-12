@@ -9,10 +9,10 @@
 int main()
 {
 	// HTTP server on port 80
-	http_server_run(80, SERC_ROOT_PATH, NULL);
+	http_server_run(80, SERC_ROOT_PATH, 1, NULL, NULL);
 
 	// HTTPS server on port 443
-	//http_server_run(443, SERC_ROOT_PATH, SSL_KEYS_AND_CERTS);
+	//http_server_run(443, SERC_ROOT_PATH, 1, SSL_KEYS_AND_CERTS, NULL);
 
 	return 0;
 }
