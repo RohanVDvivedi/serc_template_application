@@ -20,7 +20,7 @@ int call_before_controller(http_request_head* hrq, stream* strm, void* per_reque
 
 int call_after_controller(http_request_head* hrq, stream* strm, void* per_request_param, const void* server_param)
 {
-	printf("before : %d\n", *((int*)(per_request_param)));
+	printf("after : %d\n", *((int*)(per_request_param)));
 	print_http_request_head(hrq);
 	return 0;
 }
