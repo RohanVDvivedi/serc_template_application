@@ -18,7 +18,7 @@
 		"paths"			:	["/index/delete_post"]
 	},
 	{
-		"controller"	:	"redirect_to_google",
+		"controller"	:	"redirect_to_google_controller",
 		"methods"		:	"GET",
 		"paths"			:	["/doc/go_google"]
 	},
