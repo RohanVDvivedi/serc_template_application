@@ -1,6 +1,7 @@
 #include<http_request.h>
 #include<http_response.h>
 #include<http_header_util.h>
+#include<http_path_and_path_params.h>
 
 #include<stacked_stream.h>
 #include<stream_util.h>
@@ -24,16 +25,33 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 			goto EXIT_C_1;
 		}
 
-		#define BUFFER_SIZE 1024
-		char buffer[BUFFER_SIZE];
-		size_t bytes_read = 0;
 		int error = 0;
-		while((bytes_read = read_from_stacked_stream(&sstrm, buffer, BUFFER_SIZE, &error)) && error == 0)
+
+		if(has_url_encoded_params_in_body(&(hrq->headers)))
 		{
-			printf("<");
-			for(size_t i = 0; i < bytes_read; i++)
-				printf("%c", buffer[i]);
-			printf(">\n");
+			dmap params;
+			init_dmap(&params, 0);
+
+			printf("attempting to print the params from url encoded body\n");
+
+			if(0 == (error = parse_url_encoded_params(get_top_of_stacked_stream(&sstrm, READ_STREAMS), &params)))
+				for_each_in_dmap(e, &params)
+					printf("\t<" printf_dstring_format "> -> <" printf_dstring_format ">\n", printf_dstring_params(&(e->key)), printf_dstring_params(&(e->value)));
+
+			deinit_dmap(&params);
+		}
+		else
+		{
+			#define BUFFER_SIZE 1024
+			char buffer[BUFFER_SIZE];
+			size_t bytes_read = 0;
+			while((bytes_read = read_from_stacked_stream(&sstrm, buffer, BUFFER_SIZE, &error)) && error == 0)
+			{
+				printf("<");
+				for(size_t i = 0; i < bytes_read; i++)
+					printf("%c", buffer[i]);
+				printf(">\n");
+			}
 		}
 
 		close_deinitialize_free_all_from_stacked_stream(&sstrm, READ_STREAMS);
