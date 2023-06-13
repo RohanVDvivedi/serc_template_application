@@ -15,5 +15,34 @@
 	<p id="datetime"></p>
 	<img src="/img/test_jpg.jpg">
 	<img src="/img/test_png.png">
+	<br>
+	<form action="/form/my_form_controller" method="get">
+	<!-- <form action="/form/my_form_controller" method="post" enctype="application/x-www-form-urlencoded"> -->
+	<!-- <form action="/form/my_form_controller" method="post" enctype="multipart/form-data"> -->
+	<!-- <form action="/form/my_form_controller" method="post" enctype="text/plain"> -->
+		<label for="fname">First name:</label><br>
+		<input type="text" id="fname" name="fname"><br>
+
+		<label for="lname">Last name:</label><br>
+		<input type="text" id="lname" name="lname"><br>
+
+		<label for="html">HTML</label><br>
+		<input type="radio" id="html" name="fav_language" value="HTML"><br>
+		<label for="css">CSS</label><br>
+		<input type="radio" id="css" name="fav_language" value="CSS"><br>
+		<label for="javascript">JavaScript</label><br>
+		<input type="radio" id="javascript" name="fav_language" value="JavaScript"><br>
+
+		<label for="C">C</label><br>
+		<input type="checkbox" id="C" name="fav_sys_language" value="C"><br>
+		<label for="C++">C++</label><br>
+		<input type="checkbox" id="C++" name="fav_sys_language" value="C++"><br>
+		<label for="Golang">Golang</label><br>
+		<input type="checkbox" id="Golang" name="fav_sys_language" value="Golang"><br>
+		<label for="Rust">Golang</label><br>
+		<input type="checkbox" id="Rust" name="fav_sys_language" value="Rust"><br>
+
+		<input type="submit" value="Submit Form">
+	</form>
 </body>
 </html>
