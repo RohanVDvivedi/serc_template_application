@@ -39,5 +39,10 @@
 		"destroy_per_request_param" : "del_per_request_param",
 		"methods"		:	"*",
 		"paths"			:	["/cookie_setup"]
+	},
+	{
+		"controller"	:	"my_form_controller",
+		"methods"		:	["GET", "POST"],
+		"paths"			:	["/form/my_form_controller"]
 	}
 ]
