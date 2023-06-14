@@ -27,6 +27,10 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 
 		int error = 0;
 
+		int is_boundary_present = 0;
+		dstring boundary;
+		init_empty_dstring(&boundary, 0);
+
 		if(has_url_encoded_params_in_body(&(hrq->headers)))
 		{
 			dmap params;
@@ -39,6 +43,24 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 					printf("\t<" printf_dstring_format "> -> <" printf_dstring_format ">\n", printf_dstring_params(&(e->key)), printf_dstring_params(&(e->value)));
 
 			deinit_dmap(&params);
+		}
+		else if(has_multipart_form_data_in_body(&(hrq->headers), &is_boundary_present, &boundary))
+		{
+			if(is_boundary_present)
+				printf("boundary of multipart/form-data = " printf_dstring_format "\n", printf_dstring_params(&boundary));
+			else
+				printf("boundary of multipart/form-data absent\n");
+
+			#define BUFFER_SIZE 1024
+			char buffer[BUFFER_SIZE];
+			size_t bytes_read = 0;
+			while((bytes_read = read_from_stacked_stream(&sstrm, buffer, BUFFER_SIZE, &error)) && error == 0)
+			{
+				printf("<");
+				for(size_t i = 0; i < bytes_read; i++)
+					printf("%c", buffer[i]);
+				printf(">\n");
+			}
 		}
 		else
 		{
