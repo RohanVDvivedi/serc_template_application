@@ -2,6 +2,7 @@
 #include<http_response.h>
 #include<http_header_util.h>
 #include<http_path_and_path_params.h>
+#include<http_multipart_form_data.h>
 
 #include<stacked_stream.h>
 #include<stream_util.h>
@@ -47,20 +48,58 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 		else if(has_multipart_form_data_in_body(&(hrq->headers), &is_boundary_present, &boundary))
 		{
 			if(is_boundary_present)
+			{
 				printf("boundary of multipart/form-data = " printf_dstring_format "\n", printf_dstring_params(&boundary));
+
+				if((error = read_prefix_multipart_form_data(strm, &boundary)))
+					goto MPFD_0;
+
+				while(error == 0)
+				{
+					multipart_form_data_segment* seg = parse_next_multipart_form_data(get_top_of_stacked_stream(&sstrm, READ_STREAMS), &boundary, &error);
+
+					if(seg == NULL || error)
+						break;
+
+					printf("Multipart form data headers : \n");
+					for_each_in_dmap(e, &(seg->headers))
+						printf("\t<" printf_dstring_format "> -> <" printf_dstring_format ">\n", printf_dstring_params(&(e->key)), printf_dstring_params(&(e->value)));
+
+					printf("Multipart form data body : \n");
+					#define BUFFER_SIZE 1024
+					char buffer[BUFFER_SIZE];
+					size_t bytes_read = 0;
+					while((bytes_read = read_from_stream(&(seg->body_stream), buffer, BUFFER_SIZE, &error)) && error == 0)
+					{
+						printf("<");
+						for(size_t i = 0; i < bytes_read; i++)
+							printf("%c", buffer[i]);
+						printf(">\n");
+					}
+					printf("\n");
+
+					destroy_multipart_form_data_segment(seg);
+				}
+
+				MPFD_0:;
+			}
 			else
+			{
 				printf("boundary of multipart/form-data absent\n");
 
-			#define BUFFER_SIZE 1024
-			char buffer[BUFFER_SIZE];
-			size_t bytes_read = 0;
-			while((bytes_read = read_from_stacked_stream(&sstrm, buffer, BUFFER_SIZE, &error)) && error == 0)
-			{
-				printf("<");
-				for(size_t i = 0; i < bytes_read; i++)
-					printf("%c", buffer[i]);
-				printf(">\n");
+				#define BUFFER_SIZE 1024
+				char buffer[BUFFER_SIZE];
+				size_t bytes_read = 0;
+				while((bytes_read = read_from_stacked_stream(&sstrm, buffer, BUFFER_SIZE, &error)) && error == 0)
+				{
+					printf("<");
+					for(size_t i = 0; i < bytes_read; i++)
+						printf("%c", buffer[i]);
+					printf(">\n");
+				}
 			}
+
+			deinit_dstring(&boundary);
 		}
 		else
 		{
