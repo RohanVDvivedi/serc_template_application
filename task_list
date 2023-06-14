@@ -1,3 +1,2 @@
- * fix redirect controller
  * add testcase for websockets
  * add testcase for server sent events
