@@ -61,9 +61,12 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 					if(seg == NULL || error)
 						break;
 
-					printf("Multipart form data headers : \n");
-					for_each_in_dmap(e, &(seg->headers))
-						printf("\t<" printf_dstring_format "> -> <" printf_dstring_format ">\n", printf_dstring_params(&(e->key)), printf_dstring_params(&(e->value)));
+					dstring name;		init_empty_dstring(&name, 0);
+					dstring filename;	init_empty_dstring(&filename, 0);
+
+					get_name_n_filename_from_content_disposition_header(seg, &name, &filename);
+
+					printf("Multipart field, name = " printf_dstring_format ", filename = " printf_dstring_format "\n", printf_dstring_params(&name), printf_dstring_params(&filename));
 
 					printf("Multipart form data body : \n");
 					#define BUFFER_SIZE 1024
@@ -79,6 +82,9 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 					printf("\n");
 
 					destroy_multipart_form_data_segment(seg);
+
+					deinit_dstring(&name);
+					deinit_dstring(&filename);
 				}
 
 				MPFD_0:;
