@@ -71,7 +71,7 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 					size_t bytes_read = 0;
 					while((bytes_read = read_from_stream(&(seg->body_stream), buffer, BUFFER_SIZE, &error)) && error == 0)
 					{
-						printf("<");
+						printf("\t<");
 						for(size_t i = 0; i < bytes_read; i++)
 							printf("%c", buffer[i]);
 						printf(">\n");
