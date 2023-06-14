@@ -51,7 +51,7 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 			{
 				printf("boundary of multipart/form-data = " printf_dstring_format "\n", printf_dstring_params(&boundary));
 
-				if((error = read_prefix_multipart_form_data(strm, &boundary)))
+				if((error = read_prefix_multipart_form_data(get_top_of_stacked_stream(&sstrm, READ_STREAMS), &boundary)))
 					goto MPFD_0;
 
 				while(error == 0)
@@ -98,8 +98,6 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 					printf(">\n");
 				}
 			}
-
-			deinit_dstring(&boundary);
 		}
 		else
 		{
@@ -116,6 +114,8 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 		}
 
 		close_deinitialize_free_all_from_stacked_stream(&sstrm, READ_STREAMS);
+
+		deinit_dstring(&boundary);
 
 		if(error)
 		{
