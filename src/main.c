@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<signal.h>
 
 #define SERC_ROOT_PATH			"./public"
 #define SSL_KEYS_AND_CERTS		"./.serc_config/server"
@@ -8,6 +9,9 @@
 
 int main()
 {
+	// you handle EPIPE errors of stream and not rely on SIGPIPE
+	signal(SIGPIPE, SIG_IGN);
+
 	// HTTP server on port 80
 	http_server_run(80, SERC_ROOT_PATH, 1, NULL, NULL);
 
