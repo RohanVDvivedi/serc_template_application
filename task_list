@@ -1,2 +1,5 @@
+ * fail requests if dpipe, dstring or dmap fail
+ * use new error handling httpparser's api and its parsing error codes, just like Serc
+
  * add testcase for websockets
  * add testcase for server sent events
