@@ -1,5 +1,2 @@
- * fail requests if dpipe, dstring or dmap fail
- * error handling conforming to new HTTPparser error handling api for parser and serializer
-
  * add testcase for websockets
  * add testcase for server sent events
