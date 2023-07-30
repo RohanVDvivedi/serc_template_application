@@ -16,7 +16,7 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 
 	dmap cookies;
 	init_dmap(&cookies, 0);
-	if(-1 == parse_cookies_from_cookie_header(&cookies, &(hrq->headers)))
+	if(HTTP_NO_ERROR != parse_cookies_from_cookie_header(&cookies, &(hrq->headers)))
 	{
 		close_connection = 1;
 		goto EXIT_C_1;
@@ -24,8 +24,16 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 
 	// initialize response head
 	http_response_head hrp;
-	init_http_response_head_from_http_request_head(&hrp, hrq, 200, TRANSFER_CHUNKED);
-	insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("content-type"), &get_dstring_pointing_to_literal_cstring("text/plain"));
+	if(!init_http_response_head_from_http_request_head(&hrp, hrq, 200, TRANSFER_CHUNKED))
+	{
+		close_connection = 1;
+		goto EXIT_C_1;
+	}
+	if(!insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("content-type"), &get_dstring_pointing_to_literal_cstring("text/plain")))
+	{
+		close_connection = 1;
+		goto EXIT_C_2;
+	}
 
 	if(get_element_count_hashmap(&cookies) == 0)
 	{
@@ -34,12 +42,17 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 		dstring set_cookie_value;
 		init_dstring(&set_cookie_value, NULL, 0);
 		snprintf_dstring(&set_cookie_value, "client_count=%d", client_count);
-		insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("set-cookie"), &set_cookie_value);
+		if(!insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("set-cookie"), &set_cookie_value))
+		{
+			deinit_dstring(&set_cookie_value);
+			close_connection = 1;
+			goto EXIT_C_2;
+		}
 		deinit_dstring(&set_cookie_value);
 	}
 
 	// write http response head
-	if(-1 == serialize_http_response_head(strm, &hrp))
+	if(HTTP_NO_ERROR != serialize_http_response_head(strm, &hrp))
 	{
 		close_connection = 1;
 		goto EXIT_C_2;
