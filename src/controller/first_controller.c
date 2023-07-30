@@ -11,11 +11,19 @@ int first_controller(http_request_head* hrq, stream* strm, void* per_request_par
 
 	// initialize response head
 	http_response_head hrp;
-	init_http_response_head_from_http_request_head(&hrp, hrq, 200, TRANSFER_CHUNKED);
-	insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("content-type"), &get_dstring_pointing_to_literal_cstring("text/plain"));
+	if(!init_http_response_head_from_http_request_head(&hrp, hrq, 200, TRANSFER_CHUNKED))
+	{
+		close_connection = 1;
+		goto EXIT_C_0;
+	}
+	if(!insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("content-type"), &get_dstring_pointing_to_literal_cstring("text/plain")))
+	{
+		close_connection = 1;
+		goto EXIT_C_1;
+	}
 
 	// write http response head
-	if(-1 == serialize_http_response_head(strm, &hrp))
+	if(HTTP_NO_ERROR != serialize_http_response_head(strm, &hrp))
 	{
 		close_connection = 1;
 		goto EXIT_C_1;
@@ -55,6 +63,6 @@ int first_controller(http_request_head* hrq, stream* strm, void* per_request_par
 	EXIT_C_1:;
 	deinit_http_response_head(&hrp);
 
-	//EXIT_C_0:;
+	EXIT_C_0:;
 	return close_connection;
 }
