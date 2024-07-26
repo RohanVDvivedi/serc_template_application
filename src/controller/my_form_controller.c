@@ -63,9 +63,14 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 
 					dstring name;
 					dstring filename;
-					get_name_n_filename_from_content_disposition_header(seg, &name, &filename);
+					int res_names = get_name_n_filename_from_content_disposition_header(seg, &name, &filename);
 
-					printf("Multipart field, name = " printf_dstring_format ", filename = " printf_dstring_format "\n", printf_dstring_params(&name), printf_dstring_params(&filename));
+					printf("Multipart field:");
+					if(res_names & 1)
+						printf(" name = " printf_dstring_format, printf_dstring_params(&name));
+					if(res_names & 2)
+						printf(" filename = " printf_dstring_format, printf_dstring_params(&filename));
+					printf("\n");
 
 					printf("Multipart form data body : \n");
 					#define BUFFER_SIZE 1024
