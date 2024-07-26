@@ -30,7 +30,6 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 
 		int is_boundary_present = 0;
 		dstring boundary;
-		init_empty_dstring(&boundary, 0);
 
 		if(has_url_encoded_params_in_body(&(hrq->headers)))
 		{
@@ -51,19 +50,19 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 			{
 				printf("boundary of multipart/form-data = " printf_dstring_format "\n", printf_dstring_params(&boundary));
 
-				if((error = read_prefix_multipart_form_data(get_top_of_stacked_stream(&sstrm, READ_STREAMS), &boundary)))
+				read_prefix_multipart_form_data(get_top_of_stacked_stream(&sstrm, READ_STREAMS), &boundary, &error);
+				if(error != HTTP_MULTIPART_FORM_DATA_NO_ERROR)
 					goto MPFD_0;
 
-				while(error == 0)
+				while(error == HTTP_MULTIPART_FORM_DATA_NO_ERROR)
 				{
 					multipart_form_data_segment* seg = parse_next_multipart_form_data(get_top_of_stacked_stream(&sstrm, READ_STREAMS), &boundary, &error);
 
 					if(seg == NULL || error)
 						break;
 
-					dstring name;		init_empty_dstring(&name, 0);
-					dstring filename;	init_empty_dstring(&filename, 0);
-
+					dstring name;
+					dstring filename;
 					get_name_n_filename_from_content_disposition_header(seg, &name, &filename);
 
 					printf("Multipart field, name = " printf_dstring_format ", filename = " printf_dstring_format "\n", printf_dstring_params(&name), printf_dstring_params(&filename));
@@ -82,9 +81,6 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 					printf("\n");
 
 					destroy_multipart_form_data_segment(seg);
-
-					deinit_dstring(&name);
-					deinit_dstring(&filename);
 				}
 
 				MPFD_0:;
@@ -120,8 +116,6 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 		}
 
 		close_deinitialize_free_all_from_stacked_stream(&sstrm, READ_STREAMS);
-
-		deinit_dstring(&boundary);
 
 		if(error)
 		{
