@@ -42,17 +42,11 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 	if(get_element_count_hashmap(&cookies) == 0)
 	{
 		client_count++;
-
-		dstring set_cookie_value;
-		init_dstring(&set_cookie_value, NULL, 0);
-		snprintf_dstring(&set_cookie_value, "client_count=%d", client_count);
-		if(!insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("set-cookie"), &set_cookie_value))
+		if(!insert_formatted_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("set-cookie"), "client_count=%d", client_count))
 		{
-			deinit_dstring(&set_cookie_value);
 			close_connection = 1;
 			goto EXIT_C_2;
 		}
-		deinit_dstring(&set_cookie_value);
 	}
 
 	// write http response head
