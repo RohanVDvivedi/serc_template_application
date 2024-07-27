@@ -15,7 +15,11 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 	int close_connection = 0;
 
 	dmap cookies;
-	init_dmap(&cookies, 0);
+	if(!init_dmap(&cookies, 0))
+	{
+		close_connection = 1;
+		goto EXIT_C_0;
+	}
 	if(HTTP_NO_ERROR != parse_cookies_from_cookie_header(&cookies, &(hrq->headers)))
 	{
 		close_connection = 1;
@@ -59,7 +63,11 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 	}
 
 	stacked_stream sstrm;
-	initialize_stacked_stream(&sstrm);
+	if(!initialize_stacked_stream(&sstrm))
+	{
+		close_connection = 1;
+		goto EXIT_C_2;
+	}
 
 	if(0 > intialize_http_body_and_encoding_streams_for_writing(&sstrm, strm, &(hrp.headers)))
 	{
@@ -95,6 +103,6 @@ int cookie_setup_controller(http_request_head* hrq, stream* strm, void* per_requ
 	EXIT_C_1:;
 	deinit_dmap(&cookies);
 
-	//EXIT_C_0:;
+	EXIT_C_0:;
 	return close_connection;
 }

@@ -30,7 +30,11 @@ int first_controller(http_request_head* hrq, stream* strm, void* per_request_par
 	}
 
 	stacked_stream sstrm;
-	initialize_stacked_stream(&sstrm);
+	if(!initialize_stacked_stream(&sstrm))
+	{
+		close_connection = 1;
+		goto EXIT_C_1;
+	}
 
 	if(0 > intialize_http_body_and_encoding_streams_for_writing(&sstrm, strm, &(hrp.headers)))
 	{

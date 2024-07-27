@@ -16,7 +16,11 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 	print_http_request_head(hrq);
 
 	stacked_stream sstrm;
-	initialize_stacked_stream(&sstrm);
+	if(!initialize_stacked_stream(&sstrm))
+	{
+		close_connection = 1;
+		goto EXIT_C_0;
+	}
 
 	if(hrq->method == POST)
 	{
@@ -34,7 +38,11 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 		if(has_url_encoded_params_in_body(&(hrq->headers)))
 		{
 			dmap params;
-			init_dmap(&params, 0);
+			if(!init_dmap(&params, 0))
+			{
+				error = 1;
+				goto UEP0;
+			}
 
 			printf("attempting to print the params from url encoded body\n");
 
@@ -43,6 +51,8 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 					printf("\t<" printf_dstring_format "> -> <" printf_dstring_format ">\n", printf_dstring_params(&(e->key)), printf_dstring_params(&(e->value)));
 
 			deinit_dmap(&params);
+
+			UEP0;;
 		}
 		else if(has_multipart_form_data_in_body(&(hrq->headers), &is_boundary_present, &boundary))
 		{
@@ -180,6 +190,6 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 	EXIT_C_1:;
 	deinitialize_stacked_stream(&sstrm);
 
-	//EXIT_C_0:;
+	EXIT_C_0:;
 	return close_connection;
 }

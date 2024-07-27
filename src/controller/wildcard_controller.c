@@ -11,8 +11,16 @@ int wildcard_controller(http_request_head* hrq, stream* strm, void* per_request_
 
 	// initialize response head
 	http_response_head hrp;
-	init_http_response_head_from_http_request_head(&hrp, hrq, 200, TRANSFER_CHUNKED);
-	insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("content-type"), &get_dstring_pointing_to_literal_cstring("text/plain"));
+	if(!init_http_response_head_from_http_request_head(&hrp, hrq, 200, TRANSFER_CHUNKED))
+	{
+		close_connection = 1;
+		goto EXIT_C_0;
+	}
+	if(!insert_in_dmap(&(hrp.headers), &get_dstring_pointing_to_literal_cstring("content-type"), &get_dstring_pointing_to_literal_cstring("text/plain")))
+	{
+		close_connection = 1;
+		goto EXIT_C_1;
+	}
 
 	// write http response head
 	if(-1 == serialize_http_response_head(strm, &hrp))
@@ -22,7 +30,11 @@ int wildcard_controller(http_request_head* hrq, stream* strm, void* per_request_
 	}
 
 	stacked_stream sstrm;
-	initialize_stacked_stream(&sstrm);
+	if(!initialize_stacked_stream(&sstrm))
+	{
+		close_connection = 1;
+		goto EXIT_C_1;
+	}
 
 	if(0 > intialize_http_body_and_encoding_streams_for_writing(&sstrm, strm, &(hrp.headers)))
 	{
@@ -55,6 +67,6 @@ int wildcard_controller(http_request_head* hrq, stream* strm, void* per_request_
 	EXIT_C_1:;
 	deinit_http_response_head(&hrp);
 
-	//EXIT_C_0:;
+	EXIT_C_0:;
 	return close_connection;
 }
