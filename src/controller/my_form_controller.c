@@ -52,7 +52,7 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 
 			deinit_dmap(&params);
 
-			UEP0;;
+			UEP0:;
 		}
 		else if(has_multipart_form_data_in_body(&(hrq->headers), &is_boundary_present, &boundary))
 		{
