@@ -85,11 +85,11 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 					printf("Multipart form data body : \n");
 					#define BUFFER_SIZE 1024
 					char buffer[BUFFER_SIZE];
-					size_t bytes_read = 0;
+					cy_uint bytes_read = 0;
 					while((bytes_read = read_from_stream(&(seg->body_stream), buffer, BUFFER_SIZE, &error)) && error == 0)
 					{
 						printf("\t<");
-						for(size_t i = 0; i < bytes_read; i++)
+						for(cy_uint i = 0; i < bytes_read; i++)
 							printf("%c", buffer[i]);
 						printf(">\n");
 					}
@@ -106,11 +106,11 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 
 				#define BUFFER_SIZE 1024
 				char buffer[BUFFER_SIZE];
-				size_t bytes_read = 0;
+				cy_uint bytes_read = 0;
 				while((bytes_read = read_from_stacked_stream(&sstrm, buffer, BUFFER_SIZE, &error)) && error == 0)
 				{
 					printf("<");
-					for(size_t i = 0; i < bytes_read; i++)
+					for(cy_uint i = 0; i < bytes_read; i++)
 						printf("%c", buffer[i]);
 					printf(">\n");
 				}
@@ -120,11 +120,11 @@ int my_form_controller(http_request_head* hrq, stream* strm, void* per_request_p
 		{
 			#define BUFFER_SIZE 1024
 			char buffer[BUFFER_SIZE];
-			size_t bytes_read = 0;
+			cy_uint bytes_read = 0;
 			while((bytes_read = read_from_stacked_stream(&sstrm, buffer, BUFFER_SIZE, &error)) && error == 0)
 			{
 				printf("<");
-				for(size_t i = 0; i < bytes_read; i++)
+				for(cy_uint i = 0; i < bytes_read; i++)
 					printf("%c", buffer[i]);
 				printf(">\n");
 			}
