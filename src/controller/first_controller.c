@@ -1,9 +1,9 @@
-#include<http_request.h>
-#include<http_response.h>
-#include<http_header_util.h>
+#include<httpparser/http_request.h>
+#include<httpparser/http_response.h>
+#include<httpparser/http_header_util.h>
 
-#include<stacked_stream.h>
-#include<stream_util.h>
+#include<connman/stacked_stream.h>
+#include<cutlery/stream_util.h>
 
 int first_controller(http_request_head* hrq, stream* strm, void* per_request_param, const void* server_param)
 {

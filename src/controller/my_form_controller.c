@@ -1,11 +1,11 @@
-#include<http_request.h>
-#include<http_response.h>
-#include<http_header_util.h>
-#include<http_path_and_path_params.h>
-#include<http_multipart_form_data.h>
+#include<httpparser/http_request.h>
+#include<httpparser/http_response.h>
+#include<httpparser/http_header_util.h>
+#include<httpparser/http_path_and_path_params.h>
+#include<httpparser/http_multipart_form_data.h>
 
-#include<stacked_stream.h>
-#include<stream_util.h>
+#include<connman/stacked_stream.h>
+#include<cutlery/stream_util.h>
 
 #include<stdio.h>
 

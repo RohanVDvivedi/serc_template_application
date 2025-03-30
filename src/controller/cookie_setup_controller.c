@@ -1,8 +1,8 @@
-#include<http_request.h>
-#include<http_response.h>
-#include<http_header_util.h>
+#include<httpparser/http_request.h>
+#include<httpparser/http_response.h>
+#include<httpparser/http_header_util.h>
 
-#include<stream_util.h>
+#include<cutlery/stream_util.h>
 
 #include<stdio.h>
 #include<stdint.h>
