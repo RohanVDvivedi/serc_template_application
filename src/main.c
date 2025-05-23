@@ -13,7 +13,7 @@ int main()
 	signal(SIGPIPE, SIG_IGN);
 
 	// HTTP server on port 80
-	http_server_run(80, SERC_ROOT_PATH, 1, NULL, NULL);
+	http_server_run(80, SERC_ROOT_PATH, 1, NULL, 6000, NULL); // soket timeout of 6 seconds
 
 	// HTTPS server on port 443
 	//http_server_run(443, SERC_ROOT_PATH, 1, SSL_KEYS_AND_CERTS, NULL);
