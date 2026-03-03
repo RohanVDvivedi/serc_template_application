@@ -9,7 +9,7 @@ RM=rm -f
 
 CON_DIR=.serc_config
 
-CFLAGS=-Wall -O3 -I${INC_DIR}
+CFLAGS=-Wall -O3 -flto -I${INC_DIR}
 LFLAFS=-lserc -lm -lhttpparser -lconnman -lz -lssl -lcrypto -lboompar -lpthread -lcutlery
 
 TARGET=app.out
